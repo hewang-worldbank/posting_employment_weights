@@ -23,10 +23,12 @@ Employment comes from the ILOSTAT database of the International Labour Organizat
 | Variable | Type | Description |
 |---|---|---|
 | `iso3` | string | ISO 3166-1 alpha-3 country code |
-| `occupation` | integer | ISCO-08
+| `occupation` | integer | ISCO-08 four-digit occupation code |
+| `employment` | float | Wage employment in the occupation, in [UNITS]; raw employment weight |
+| `w_within_emp` | float | Within-country employment share, summing to one for each country; equal-country weight |
 
 Huang, Jingyun, Yan Liu, He Wang, and Shu Yu. 2026. "Who Takes the Hit? The Uneven Impact of Generative AI on Hiring Demand Across Countries." Background paper for the World Development Report 2026. World Bank, Washington, DC.
 
 ## Contact
 
-Yan Liu (yanliu@worldbank.org), He Wang (hwang21@worldbank.org), Shu Yu ()
+Yan Liu (yanliu@worldbank.org), He Wang (hwang21@worldbank.org), Shu Yu (syu2@worldbank.or), Jingyun Huang (h145@rice.edu)
