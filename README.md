@@ -1,55 +1,32 @@
-# Sampling Weights for Cross-Country Job Posting Analysis
+# Posting Employment Weights
 
 This repository provides the employment-based sampling weights used in Huang, Liu, Wang, and Yu (2026), "Who Takes the Hit? The Uneven Impact of Generative AI on Hiring Demand Across Countries," a background paper for the World Development Report 2026: The Promise of Artificial Intelligence.
 
 ## Why these weights
 
-Online job postings are not representative of labor markets. Coverage varies widely across countries (Lightcast captures roughly 70 percent of U.S. vacancies but less than 1 percent in many developing economies), and within countries postings skew toward high-skill, white-collar, and ICT-intensive occupations. Unweighted estimates therefore over-represent cells where postings are dense rather than where workers are. These weights re-weight each cell by its share of wage employment, so that estimates are proportional to workers rather than to vacancies.
+Online job postings are not representative of labor markets. Coverage varies widely across countries (Lightcast captures roughly 70 percent of U.S. vacancies but less than 1 percent in many developing economies), and within countries postings skew toward high-skill, white-collar, and ICT-intensive occupations. Unweighted estimates therefore over-represent occupations where postings are dense rather than where workers are. These weights re-weight each occupation by its share of wage employment, so that estimates are proportional to workers rather than to vacancies.
 
 ## Source data
 
-Employment counts come from the ILOSTAT database of the International Labour Organization, which harmonizes national Labor Force Surveys to ISCO-08 (occupation) and ISIC Rev. 4 (industry). We use wage employees aged 15 and above.
+Employment comes from the ILOSTAT database of the International Labour Organization, which harmonizes national Labor Force Surveys to ISCO-08. We use wage employees aged 15 and above, excluding armed forces occupations and the agriculture sector.
 
 ## Construction
 
-1. **Cells.** Employment is extracted at the country × year × one-digit ISCO occupation × two-digit industry level, for 2021 onward.
-2. **Exclusions.** Armed forces occupations and agriculture are dropped, as they are rarely covered by online job boards.
-3. **Industry harmonization.** Two roll-ups ensure consistency across survey releases: code 44 is combined with 42, and code 55 is combined with 56.
-4. **Missing years.** When a country has no survey observation for a year in the sample window, the most recent pre-ChatGPT observation (2021 or 2022) is carried forward. This affects fewer than 10 percent of country-year cells.
-5. **Occupation disaggregation.** Employment in each one-digit ISCO group is distributed equally across its four-digit subcategories, to match the four-digit occupation codes in the posting data.
-6. **Weights.** Two schemes are provided:
-   - `w_equal_country`: each cell's share of country wage employment, normalized to sum to one within each country, so every country contributes equally to pooled estimates (baseline specification).
-   - `w_raw_emp`: raw employment counts, so larger countries and cells contribute proportionally more (robustness check).
+1. **One-digit employment.** Wage employment is taken from ILOSTAT for each country and one-digit ISCO-08 major group.
+2. **Four-digit disaggregation.** Employment in each major group is distributed equally across its four-digit unit groups, matching the occupation codes in the Lightcast posting data. All four-digit occupations within the same major group in a country therefore carry the same employment value.
+3. **Normalization.** Each occupation's employment is divided by the country total, so that the weights sum to one within each country. This gives every country equal influence in pooled estimates.
 
-## Coverage
+## File
 
-Weights are provided for the 84-country baseline sample (42 high-income and 42 low- and middle-income economies) and the 68-country alternative sample. Income groups follow the World Bank FY2026 classification.
+`occupation_employment_84countries.csv` contains 27,242 rows, one per country and four-digit occupation. It covers the 84 countries in the baseline sample (42 high-income and 42 low- and middle-income economies, following the World Bank FY2026 income classification) and 410 ISCO-08 unit groups. Not every occupation appears in every country; the number per country ranges from 158 to 408.
 
-## Files
-
-| File | Description |
-|---|---|
-| `weights_isco4.csv` | Weights at country × year × four-digit ISCO × two-digit industry |
-| `weights_isco1.csv` | Underlying employment at country × year × one-digit ISCO × two-digit industry |
-| `country_sample.csv` | Country list, income group, and sample membership (84 and 68) |
-
-## Variables
-
-| Variable | Description |
-|---|---|
-| `iso3` | ISO 3166-1 alpha-3 country code |
-| `year` | Calendar year |
-| `isco4` / `isco1` | ISCO-08 occupation code |
-| `ind2` | Two-digit industry code (harmonized) |
-| `emp` | Wage employment (ILOSTAT, persons) |
-| `w_equal_country` | Within-country employment share (sums to one by country-year) |
-| `w_raw_emp` | Raw employment count weight |
-| `imputed` | 1 if the year was carried forward from 2021 or 2022 |
-
-## Citation
+| Variable | Type | Description |
+|---|---|---|
+| `iso3` | string | ISO 3166-1 alpha-3 country code |
+| `occupation` | integer | ISCO-08
 
 Huang, Jingyun, Yan Liu, He Wang, and Shu Yu. 2026. "Who Takes the Hit? The Uneven Impact of Generative AI on Hiring Demand Across Countries." Background paper for the World Development Report 2026. World Bank, Washington, DC.
 
 ## Contact
 
-Yan Liu (yanliu@worldbank.org), He Wang (hwang21@worldbank.org)
+Yan Liu (yanliu@worldbank.org), He Wang (hwang21@worldbank.org), Shu Yu ()
